@@ -2,8 +2,8 @@
 -- as their main style, ranked by their longevity
 
 DROP FUNCTION IF EXISTS lifespan;
-DELIMITER //
 
+DELIMITER //
 CREATE FUNCTION lifespan(formed INTEGER, split INTEGER)
     RETURNS INTEGER DETERMINISTIC 
 BEGIN
@@ -13,10 +13,9 @@ BEGIN
         RETURN split - formed;
     END IF;
 END//
-
 DELIMITER ;
 
-SELECT band_name, lifespan(split, formed) AS lifespan
+SELECT band_name, lifespan(formed, split) AS lifespan
 FROM metal_bands
-WHERE metal_bands.style = 'Glam rock'
-ORDER BY lifespan;
+WHERE style LIKE '%Glam rock%'
+ORDER BY lifespan DESC;
