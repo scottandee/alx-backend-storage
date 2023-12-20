@@ -8,7 +8,7 @@ import uuid
 class Cache:
     """This is the cache class"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """This is the instance method that creates
         a new Redis instance and flushes the db
         """
