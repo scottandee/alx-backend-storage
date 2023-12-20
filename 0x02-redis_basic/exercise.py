@@ -3,6 +3,7 @@
 
 import redis
 import uuid
+from typing import Callable
 
 
 class Cache:
@@ -22,3 +23,30 @@ class Cache:
         key: str = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
+
+    def get(self, key: str, fn: Callable = None) -> int | float | bytes | str:
+        """This method that retreives the data back in the
+        original format in which it was stored
+        """
+        if not self._redis.exists(key):
+            return None
+        if fn is None:
+            return self._redis.get(key)
+        else:
+            return fn(self._redis.get(key))
+
+    def get_int(self, key: str) -> int:
+        """This ethod retrieves the data back as and
+        integer
+        """
+        if not self._redis.exists(key):
+            return None
+        return int(self._redis.get(key))
+
+    def get_str(self, key: str) -> str:
+        """This ethod retrieves the data back as and
+        string
+        """
+        if not self._redis.exists(key):
+            return None
+        return str(self._redis.get(key))
