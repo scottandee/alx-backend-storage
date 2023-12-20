@@ -3,7 +3,19 @@
 
 import redis
 import uuid
-from typing import Callable
+from typing import Callable, Union
+from functools import wraps
+
+
+def count_calls(method: Callable) -> Callable:
+    """T"""
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        """"""
+        self._redis.incr(method.__qualname__, 1)
+        result = method(self, *args, **kwargs)
+        return result
+    return wrapper
 
 
 class Cache:
@@ -16,7 +28,8 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
-    def store(self, data: int | float | bytes | str) -> str:
+    @count_calls
+    def store(self, data: Union[int, float, bytes, str]) -> str:
         """This method adds a new key, value pair
         to the redis database
         """
@@ -24,7 +37,8 @@ class Cache:
         self._redis.set(key, data)
         return key
 
-    def get(self, key: str, fn: Callable = None) -> int | float | bytes | str:
+    def get(self, key: str, fn: Callable = None) -> \
+            Union[int, float, bytes, str]:
         """This method that retreives the data back in the
         original format in which it was stored
         """
@@ -35,15 +49,15 @@ class Cache:
         else:
             return fn(self._redis.get(key))
 
-    def get_int(self, key: str) -> int:
+    def get_int(self, key: str) -> Union[int, None]:
         """This ethod retrieves the data back as and
         integer
         """
         if not self._redis.exists(key):
             return None
-        return int(self._redis.get(key))
+        return int.from_bytes(self._redis.get(key), "big")
 
-    def get_str(self, key: str) -> str:
+    def get_str(self, key: str) -> Union[str, None]:
         """This ethod retrieves the data back as and
         string
         """
