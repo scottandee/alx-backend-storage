@@ -77,3 +77,8 @@ class Cache:
         if not self._redis.exists(key):
             return None
         return str(self._redis.get(key))
+
+
+def replay(store):
+    """"""
+    pass
