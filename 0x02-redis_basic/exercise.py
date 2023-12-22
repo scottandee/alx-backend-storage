@@ -42,7 +42,7 @@ class Cache:
 
     @count_calls
     @call_history
-    def store(self, data: Union[int, float, bytes, str]) -> str:
+    def store(self, data: Union[str, bytes, int, float]) -> str:
         """This method adds a new key, value pair
         to the redis database
         """
