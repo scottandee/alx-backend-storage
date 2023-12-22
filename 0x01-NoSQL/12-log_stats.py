@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
-"""This script provides some stats about nginx
-logs stored in MongoDB
+"""This script when run provides some stats
+about nginx logs stored in MongoDB line by line
+showing the total number of logs, number of times
+each method was requested and the total number of
+status checks
 """
 
 from pymongo import MongoClient
