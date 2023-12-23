@@ -88,7 +88,7 @@ def replay(store):
     inputs = r.lrange("{}:inputs".format(store.__qualname__), 0, -1)
     outputs = r.lrange("{}:outputs".format(store.__qualname__), 0, -1)
 
-    print(f"Cache.store was called {call_count} times")
+    print(f"Cache.store was called {call_count} times:")
     for value, key in zip(inputs, outputs):
         print(f"Cache.store(*{value.decode('utf-8')}) -> \
 {key.decode('utf-8')}")
