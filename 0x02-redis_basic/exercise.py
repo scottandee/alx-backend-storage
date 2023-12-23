@@ -79,15 +79,14 @@ class Cache:
         return str(self._redis.get(key))
 
 
-def replay(cache):
+def replay(store):
     """This method displays the history of the
-    calls of the function passed as argument
+    calls of the method passed as argument
     """
-    call_count = cache.get(cache.store.__qualname__).decode("utf-8")
-    inputs = cache._redis.lrange("{}:inputs".format(
-        cache.store.__qualname__), 0, -1)
-    outputs = cache._redis.lrange("{}:outputs".format(
-        cache.store.__qualname__), 0, -1)
+    r = redis.Redis()
+    call_count = r.get(store.__qualname__).decode("utf-8")
+    inputs = r.lrange("{}:inputs".format(store.__qualname__), 0, -1)
+    outputs = r.lrange("{}:outputs".format(store.__qualname__), 0, -1)
 
     print(f"Cache.store was called {call_count} times")
     for value, key in zip(inputs, outputs):
